@@ -1,0 +1,23 @@
+background 
+	0
+
+
+Stimulus
+	that value for which the visibility threshold is somewhere in the mid-range of the surround luminance for R, G, B, W
+
+surround
+
+
+    1 text = {['Stimulus Luminace : ', num2str(stimulusLuma,'%.2f')],
+    2 ['Background Stimulus : ', num2str(backLuma,'%.2f')],
+    3 ['Surrounding Luminance : ', num2str(surrLumaInt,'%.2f')],
+    4 ['Surrounding Color : ', num2str(surrColor,'%.2f')],
+    5 ['Background Radius: ', num2str(bg_r,'%.2f')],
+    6 ['Circle 1 Radius: ', num2str(st_r,'%.2f')],
+    7 ['Circle 2 Gap: ', num2str(c_width,'%.2f')],
+    8 ['Gap: ', num2str(c_height,'%.2f')],
+    9 ['Margin Luminance : ', num2str(marginLuma,'%.2f')],
+    10 ['Margin Radius : ', num2str(marginRadius,'%.2f')]
+
+
+    Number, stimulus Luminance, Back Luminance, Surr Luminance, GapsShown, Predicted, time, Match
