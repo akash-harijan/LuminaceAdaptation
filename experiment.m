@@ -55,7 +55,7 @@ data = [];
 
 starting_lumas = [10 20 10 50 5 10 10];
 
-for i=1:7
+for i=1:14
 
     EXIT_SIGNAL = 0;
     surrLumaJump = 0;
@@ -77,19 +77,19 @@ for i=1:7
     while (GetSecs-start_time) < pause_time
 
         surrColor=i;
-        if surrColor == 1
+        if surrColor == 1 || surrColor == 2
             surrLuma = [adptSurrLuma adptSurrLuma adptSurrLuma];
-        elseif surrColor == 2
+        elseif surrColor == 3 || surrColor == 4
             surrLuma = [adptSurrLuma 0 0];
-        elseif surrColor == 3
+        elseif surrColor == 5 || surrColor == 6
             surrLuma = [0 adptSurrLuma 0];
-        elseif surrColor == 4
+        elseif surrColor == 7 || surrColor == 8
             surrLuma = [0 0 adptSurrLuma];
-        elseif surrColor == 5
+        elseif surrColor == 9 || surrColor == 10
             surrLuma = [adptSurrLuma adptSurrLuma 0]; %yellow
-        elseif surrColor == 6
+        elseif surrColor == 11 || surrColor == 12
             surrLuma = [adptSurrLuma 0 adptSurrLuma]; % magenta
-        elseif surrColor == 7
+        elseif surrColor == 13 || surrColor == 14
             surrLuma = [ 0 adptSurrLuma adptSurrLuma]; %cyan
         end
 
@@ -144,19 +144,19 @@ for i=1:7
 
 
         surrColor = i; 
-        if surrColor == 1
+        if surrColor == 1 || surrColor == 2
             surrLuma = [surrLumaInt surrLumaInt surrLumaInt];
-        elseif surrColor == 2
+        elseif surrColor == 3 || surrColor == 4
             surrLuma = [surrLumaInt 0 0];
-        elseif surrColor == 3
+        elseif surrColor == 5 || surrColor == 6
             surrLuma = [0 surrLumaInt 0];
-        elseif surrColor == 4
+        elseif surrColor == 7 || surrColor == 8
             surrLuma = [0 0 surrLumaInt];
-        elseif surrColor == 5
+        elseif surrColor == 9 || surrColor == 10
             surrLuma = [surrLumaInt surrLumaInt 0]; %yellow
-        elseif surrColor == 6
+        elseif surrColor == 10 || surrColor == 12
             surrLuma = [surrLumaInt 0 surrLumaInt]; % magenta
-        elseif surrColor == 7
+        elseif surrColor == 13 || surrColor == 14
             surrLuma = [ 0 surrLumaInt surrLumaInt]; %cyan
         end
 
@@ -366,7 +366,8 @@ for i=1:7
         end
 
         if cont_matches==5 && unmatchs > 0
-            unmatchs = unmatchs - 1;
+            unmatchs = 0;
+%             unmatchs = unmatchs - 1;
         end 
 
         timeTaken = toc;
