@@ -49,24 +49,11 @@ dvc = GetKeyboardIndices;
 KbQueueCreate(dvc, keyFlags); % initialize the Queue
 
 
-% EXIT_SIGNAL = 0;
-% surrLumaJump = 50;
-% unmatchs = 0;
-% cont_matches = 0;
-% cont_unmatches = 0;
 data = [];
-% stimuli_counter = 1;
-% prev_surrLumaInt = -1;
 
+% starting_lumas = [50 100 50 500 5 80 50];
 
-
-starting_lumas = [50 100 50 500 5 80 50];
-
-
-surrLumaInt = starting_lumas(1);
-% surrLuma = [surrLumaInt surrLumaInt surrLumaInt];
-
-% test = [4 5];
+starting_lumas = [10 20 10 50 5 10 10];
 
 for i=1:7
 
@@ -77,90 +64,80 @@ for i=1:7
     cont_unmatches = 0;
     stimuli_counter = 1;
     prev_surrLumaInt = -1;
-    surrLumaInt = starting_lumas(i);
-
-%     if i>2
-%         break
-%     end
-% 
-%     surrColor = test(i);
-%     disp(surrColor);
-
-     surrColor = i;
-    if surrColor == 1
-        surrLuma = [surrLumaInt surrLumaInt surrLumaInt];
-    elseif surrColor == 2
-        surrLuma = [surrLumaInt 0 0];
-    elseif surrColor == 3
-        surrLuma = [0 surrLumaInt 0];
-    elseif surrColor == 4
-        surrLuma = [0 0 surrLumaInt];
-    elseif surrColor == 5
-        surrLuma = [surrLumaInt surrLumaInt 0]; %yellow
-    elseif surrColor == 6
-        surrLuma = [surrLumaInt 0 surrLumaInt]; % magenta
-    elseif surrColor == 7
-        surrLuma = [ 0 surrLumaInt surrLumaInt]; %cyan
-    end
+%     surrLumaInt = starting_lumas(i);
 
 
-
-    x_c=0;y_c=0;
-    [y,x]=ndgrid(-bg_r:bg_r,-bg_r:bg_r);
-    
-    background_c = (x-x_c).^2+(y-y_c).^2 >= (bg_r-10)^2;
-    
-    background = double(background_c);
-    background(background_c==0) = backLuma;
-    background = cat(3, background, background, background);
-
-    temp_1 = background(:,:,1);
-    temp_2 = background(:,:,2);
-    temp_3 = background(:,:,3);
-    temp_1(background_c==1) = surrLuma(1);
-    temp_2(background_c==1) = surrLuma(2);
-    temp_3(background_c==1) = surrLuma(3);
-    background = cat(3, temp_1, temp_2, temp_3);
-    
-
-%     background = medfilt2(background, [5, 5]); % try smooth here
-
-    background = imgaussfilt(background, 2); % try smooth here
-
-%     x_c=0;y_c=0;
-%     [y,x]=ndgrid(-st_r:st_r,-st_r:st_r);
-%     circle_1_c = (x-x_c).^2+(y-y_c).^2 >= st_r^2;
-%     circle_1 = double(circle_1_c);
-%     circle_1(circle_1_c==0) = stimulusLuma;
-%     circle_1(circle_1_c==1) = backLuma;
-%     
-%     [y,x]=ndgrid(-st_r+c_width:st_r-c_width,-st_r+c_width:st_r-c_width);
-%     circle_2_idx = (x-x_c).^2+(y-y_c).^2 <= (st_r-c_width)^2;
-%     circle_2 = double(circle_2_idx);
-%     circle_2(circle_2_idx) = backLuma;
-%     circle_2(~circle_2_idx) = stimulusLuma;
-%     
-%     background(bg_r-st_r:bg_r+st_r, bg_r-st_r:bg_r+st_r,:) = cat(3,circle_1,circle_1,circle_1); 
-%     background(bg_r-st_r+c_width:bg_r+st_r-c_width, bg_r-st_r+c_width:bg_r+st_r-c_width,:) = cat(3, circle_2,circle_2,circle_2);
-
-
-
-    pause_time = 31; % seconds
+    pause_time = 10; % seconds
     start_time = GetSecs+1;
-    
-    while (GetSecs-start_time) < pause_time
-    
-    %             disp('In loop')
-        Screen('FillRect', win, surrLuma);
-        texid = Screen('MakeTexture', win, background);
-        Screen('DrawTexture', win, texid);
+        
+    adptSurrLuma = 0;
+    st_luma = starting_lumas(i);
+    step_size = double(st_luma/pause_time);
 
-        Screen('Flip', win);
+    while (GetSecs-start_time) < pause_time
+
+        surrColor=i;
+        if surrColor == 1
+            surrLuma = [adptSurrLuma adptSurrLuma adptSurrLuma];
+        elseif surrColor == 2
+            surrLuma = [adptSurrLuma 0 0];
+        elseif surrColor == 3
+            surrLuma = [0 adptSurrLuma 0];
+        elseif surrColor == 4
+            surrLuma = [0 0 adptSurrLuma];
+        elseif surrColor == 5
+            surrLuma = [adptSurrLuma adptSurrLuma 0]; %yellow
+        elseif surrColor == 6
+            surrLuma = [adptSurrLuma 0 adptSurrLuma]; % magenta
+        elseif surrColor == 7
+            surrLuma = [ 0 adptSurrLuma adptSurrLuma]; %cyan
+        end
+
+
+
+        x_c=0;y_c=0;
+        [y,x]=ndgrid(-bg_r:bg_r,-bg_r:bg_r);
+        
+        background_c = (x-x_c).^2+(y-y_c).^2 >= (bg_r-10)^2;
+        
+        background = double(background_c);
+        background(background_c==0) = backLuma;
+        background = cat(3, background, background, background);
     
+        temp_1 = background(:,:,1);
+        temp_2 = background(:,:,2);
+        temp_3 = background(:,:,3);
+        temp_1(background_c==1) = surrLuma(1);
+        temp_2(background_c==1) = surrLuma(2);
+        temp_3(background_c==1) = surrLuma(3);
+        background = cat(3, temp_1, temp_2, temp_3);
+        
+    
+    %     background = medfilt2(background, [5, 5]); % try smooth here
+    
+        background = imgaussfilt(background, 2); % try smooth here
+    
+        curr_sec = GetSecs+1;
+        
+        while(curr_sec-GetSecs)>0
+
+    
+            Screen('FillRect', win, surrLuma);
+            texid = Screen('MakeTexture', win, background);
+            Screen('DrawTexture', win, texid);
+    
+            Screen('Flip', win);
+        end
+
+        adptSurrLuma = adptSurrLuma + step_size;
+
+
+
     end
     Screen('Close');
 
 
+    surrLumaInt = starting_lumas(i);
     while ~EXIT_SIGNAL
 
         prev_surrLumaInt = surrLumaInt;
@@ -404,37 +381,6 @@ for i=1:7
 
     end
 
-
-%         surrColor = i+1;
-%         if surrColor == 1
-%             surrLuma = [starting_lumas(surrColor) starting_lumas(surrColor) starting_lumas(surrColor)];
-%         elseif surrColor == 2
-%             surrLuma = [starting_lumas(surrColor) 0 0];
-%         elseif surrColor == 3
-%             surrLuma = [0 starting_lumas(surrColor) 0];
-%         elseif surrColor == 4
-%             surrLuma = [0 0 starting_lumas(surrColor)];
-%         elseif surrColor == 5
-%             surrLuma = [starting_lumas(surrColor) starting_lumas(surrColor) 0];
-%         elseif surrColor == 6
-%             surrLuma = [starting_lumas(surrColor) 0 starting_lumas(surrColor)];
-%         elseif surrColor == 7
-%             surrLuma = [ 0 starting_lumas(surrColor) starting_lumas(surrColor)];
-%         end
-
-%         pause_time = 5; % seconds
-%         start_time = GetSecs+1;
-% 
-%         while (GetSecs-start_time) < pause_time
-% 
-% %             disp('In loop')
-%             Screen('FillRect', win, surrLuma);
-% %             texid = Screen('MakeTexture', win, background);
-% %             Screen('DrawTexture', win, texid);
-%             Screen('Flip', win);
-% 
-%         end
-%         Screen('Close');
 
 
 end
