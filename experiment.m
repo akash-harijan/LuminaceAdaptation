@@ -53,7 +53,7 @@ data = [];
 
 % starting_lumas = [50 100 50 500 5 80 50];
 
-starting_lumas = [10 20 10 50 5 10 10];
+starting_lumas = [10 10 20 20 10 10 50 50 5 5 10 10 10 10];
 
 for i=1:14
 
