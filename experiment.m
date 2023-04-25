@@ -154,7 +154,7 @@ for i=1:14
             surrLuma = [0 0 surrLumaInt];
         elseif surrColor == 9 || surrColor == 10
             surrLuma = [surrLumaInt surrLumaInt 0]; %yellow
-        elseif surrColor == 10 || surrColor == 12
+        elseif surrColor == 11 || surrColor == 12
             surrLuma = [surrLumaInt 0 surrLumaInt]; % magenta
         elseif surrColor == 13 || surrColor == 14
             surrLuma = [ 0 surrLumaInt surrLumaInt]; %cyan
@@ -351,7 +351,7 @@ for i=1:14
 %     
 %             if surrLumaJump > 10 && surrLumaJump <= 50
 %                 surrLumaJump = 10;
-%             elseif surrLumaJump == 10
+%             elseif surrLumaJump == 10 
 %                 surrLumaJump = 5;
 %             elseif surrLumaJump == 5
 %                 surrLumaJump = 1;
