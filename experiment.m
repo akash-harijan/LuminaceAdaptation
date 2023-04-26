@@ -365,7 +365,7 @@ for i=1:14
             EXIT_SIGNAL = 1;
         end
 
-        if cont_matches==5 && unmatchs > 0
+        if cont_matches==4 && unmatchs > 0
             unmatchs = 0;
 %             unmatchs = unmatchs - 1;
         end 
