@@ -144,19 +144,19 @@ for i=1:7
 
 
         surrColor = i; 
-        if surrColor == 1 || surrColor == 2
+        if surrColor == 1 
             surrLuma = [surrLumaInt surrLumaInt surrLumaInt];
-        elseif surrColor == 3 || surrColor == 4
+        elseif surrColor == 2
             surrLuma = [surrLumaInt 0 0];
-        elseif surrColor == 5 || surrColor == 6
+        elseif surrColor == 3 
             surrLuma = [0 surrLumaInt 0];
-        elseif surrColor == 7 || surrColor == 8
+        elseif surrColor == 4 
             surrLuma = [0 0 surrLumaInt];
-        elseif surrColor == 9 || surrColor == 10
+        elseif surrColor == 5 
             surrLuma = [surrLumaInt surrLumaInt 0]; %yellow
-        elseif surrColor == 11 || surrColor == 12
+        elseif surrColor == 6 
             surrLuma = [surrLumaInt 0 surrLumaInt]; % magenta
-        elseif surrColor == 13 || surrColor == 14
+        elseif surrColor == 7 
             surrLuma = [ 0 surrLumaInt surrLumaInt]; %cyan
         end
 
