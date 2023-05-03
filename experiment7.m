@@ -54,6 +54,7 @@ data = [];
 % starting_lumas = [50 100 50 500 5 80 50];
 
 starting_lumas = [10 20 10 50 5 10 10];
+quest_thresholds = [];
 
 for i=1:7
 
@@ -65,6 +66,9 @@ for i=1:7
     stimuli_counter = 1;
     prev_surrLumaInt = -1;
 %     surrLumaInt = starting_lumas(i);
+
+    tGuess=0;tGuessSd=20;pThreshold=0.51;beta=3.5;delta=0.01;gamma=0.5;grain=0.01;range=2000;
+    q = QuestCreate(tGuess, tGuessSd, pThreshold, beta, delta, gamma, grain, range);
 
 
     pause_time = 10; % seconds
@@ -331,32 +335,26 @@ for i=1:7
             if surrLumaJump < 50
                 surrLumaJump = (cont_matches*cont_matches)+1;
             end
-%             if unmatchs >= 1 && unmatchs <= 3 && cont_matches >=2 && cont_matches < 5
-%                 surrLumaJump = 10*(cont_matches+1);    
-%            end
-            % match
         else
             unmatchs = unmatchs + 1;
             cont_unmatches = cont_matches + 1;
             cont_matches = 0;
 
-            if surrLumaJump < 0 || surrLumaJump == 1
-                surrLumaJump = 1;
+            if prev_luma_wrong < 0
+                prev_luma_wrong = surrLumaInt;
+            else
+                if surrLumaInt > prev_luma_wrong+6
+                    unmatchs = 0;
+                end
+                prev_luma_wrong = surrLumaInt;
+    
+            end
+
+            if surrLumaJump < 0 %|| surrLumaJump == 1
+                surrLumaJump = 0;
             else
                 surrLumaJump = -surrLumaJump;
             end
-%             if unmatchs==1 && stimuli_counter>1
-%                 surrLumaInt = surrLumaInt - surrLumaJump;
-%             end
-%     
-%             if surrLumaJump > 10 && surrLumaJump <= 50
-%                 surrLumaJump = 10;
-%             elseif surrLumaJump == 10 
-%                 surrLumaJump = 5;
-%             elseif surrLumaJump == 5
-%                 surrLumaJump = 1;
-%             end
-            % unmatch
         end
     
         if unmatchs > 4  %surrLumaJump==1 && 
@@ -372,9 +370,10 @@ for i=1:7
 
         timeTaken = toc;
     
-        data = [data; [stimuli_counter, stimulusLuma, backLuma, prev_surrLumaInt, surrLumaJump, surrColor, {gaps_real}, {pressed_keys}, timeTaken, is_match]];
+        data = [data; [stimuli_counter, stimulusLuma, backLuma, prev_surrLumaInt, surrLumaJump, surrColor, {gaps_real}, {pressed_keys}, timeTaken, is_match, unmatchs]];
         stimuli_counter = stimuli_counter + 1;
 
+        q = QuestUpdate(q,surrLumaInt,~is_match);
 
         surrLumaInt = surrLumaInt + surrLumaJump;
 
@@ -382,16 +381,22 @@ for i=1:7
 
     end
 
+    thresholdEst = QuestMean(q); 
+    disp('Est : ')
+    disp(thresholdEst);
 
+    quest_thresholds = [quest_thresholds, thresholdEst];
 
 end
 
 KbQueueRelease;
 
-t = cell2table(data,'VariableNames',{'Index' 'Stimulus' 'Background' 'Surrounding', 'Jump', 'Color', 'GapsR', 'GapsP', 'Time', 'Match'});
+t = cell2table(data,'VariableNames',{'Index' 'Stimulus' 'Background' 'Surrounding', 'Jump', 'Color', 'GapsR', 'GapsP', 'Time', 'Match', 'Unmatches'});
 writetable(t,'test.csv');
 
-
+fid = fopen('questThresholds.txt','wt');
+fprintf(fid,'%f %f %f %f %f %f %f\n',quest_thresholds);
+fclose(fid);
 
 Screen('CloseAll');
 sca;
