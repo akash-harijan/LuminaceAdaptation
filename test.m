@@ -1,4 +1,6 @@
 
+%%
+
 clear all;
 clc;
 
@@ -27,18 +29,6 @@ labs = rgb2lab(catrgb, WhitePoint=[X Y Z]);
 catall = cat(2, catrgb, labs);
 
 writematrix(catall,'test.xlsx');
-
-
-%% Draw Stimulus Only
-
-
-
-
-%%
-
-
-
-
 
 
 
@@ -144,9 +134,81 @@ imshow(patch);
 
 
 
+%% testing the QUEST
+
+clc;
+clear all;
+
+
+% Define stimulus and experimental parameters
+surrRange = logspace(log10(0.01),log10(1),100); % range of stimulus levels
+nTrials = 49; % number of trials
+threshold = 0.5; % desired threshold level
+
+
+% Initialize QUEST object
+tGuess=0;tGuessSd=50;pThreshold=0.5;beta=3.5;delta=0.01;gamma=0.5;grain=0.01;range=1000;
+
+q = QuestCreate(tGuess, tGuessSd, pThreshold,beta, delta, gamma,grain, range);
+
+% Loop through trials
+rps = [1	1	1	1	1	1	1	0	1	1	1	1	1	1	1	0	1	0	1	0	1	1	1	1	0	1	1	1	1	1	0	0	1	1	1	0	0	1	1	1	1	1	1	1	0	0	0	0	0];
+rps = ~rps;
+stimlevels = [];
+for iTrial = 1:nTrials
+    % Get recommended stimulus level from QUEST
+    stimLevel = QuestQuantile(q);
+%     stimLevel = QuestMean(q);
+
+    if stimLevel <0
+        stimLevel = -1*stimLevel;
+    end
+
+    %   tTest=QuestQuantile(q);	% Recommended by Pelli (1987), and still our favorite.
+	% 	tTest=QuestMean(q);		% Recommended by King-Smith et al. (1994)
+	% 	tTest=QuestMode(q);	
+    stimlevels = [stimlevels, stimLevel];
+
+    disp(stimLevel);
+    % Present stimulus and record response (1 = seen, 0 = not seen)
+    response = rps(iTrial); %presentStimulusAndGetResponse(stimLevel);
+    
+    % Update QUEST with response
+    q = QuestUpdate(q,stimLevel,response);
+end
+
+% Get estimated threshold level
+thresholdEst = QuestMean(q);
+disp('Est : ')
+disp(thresholdEst);
+
+figure()
+plot(stimlevels);
 
 
 
+
+%%
+
+
+
+%  DIM P(80),Q(40),QO(40),S(l,80) \ N=20 \ N2=2*N \ S=12 \ D=.Ol \ G=.5 \ B=3.5/20 \ E=1.5 \ M:32
+%  FOR X=-N2 TO N2 \ P(N2+X)=1-(1-G)*EXP(-10 A(B*(X+E») \ IF P(N2+X»1-D THEN P(N2+X)=1-D
+%  S(O,N2-X)=LOG(1-P(N2+X» \ S(l,N2-X)=LOG(P(N2+X» \ NEXT X
+%  FOR T=-N TO N \ QO(N+T)=-(T/S)A2 \ Q(N+T)=QO(N+T) \ NEXT T
+% PRINT "Prior estimate (+I-";S;"dB)"; \ INPUT TO \ PRINT "Actual threshold"; \ INPUT Tl
+% 150 FOR K=l TO M
+% 160 GOSUB 220 \ R=INT(P(N2+X+TO-Tl)+RND(O» \ PRINT "Tdal";K;"at ";X+TO;"dB has response";R
+% 110 FOR T=-N TO N \ Q(N+T)=Q(N+T)+S(R,N2+T-X) \ NEXT T
+% 180 NEXT K
+% 190 FOR T=-N TO N \ Q(N+T)=Q(N+T)-QO(N+T) \ NEXT T
+% 200 GOSUB 220 \ PRINT "Maximum likelihood estimate is ";X+TO;"dB"
+% 210 STOP
+% 220 X=-N \ FOR T=-N TO N \ IF Q(N+T»Q(N+X) THEN X=T
+% 230 NEXT T \ RETURN
+
+
+%%
 
 
 % luma = 100;
