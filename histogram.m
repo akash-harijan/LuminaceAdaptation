@@ -2,10 +2,10 @@
 clear all;
 clc;
 
-% data = readtable('test.csv');
+data = readtable('test.csv');
 % data =  readtable('Testing\Akash-7C-4S-test.csv');
 % data =  readtable('Testing\Ehsan-7C-4S-test.csv');
-data =  readtable('Testing\Ivar-7C-4S-test.csv');
+% data =  readtable('Testing\Ivar-7C-4S-test.csv');
 
 key1_wrong = data.GapsR_1(data.Match==0);
 key1_correct = data.GapsR_1(data.Match==1);
@@ -65,6 +65,21 @@ disp(v_wrong_perc)
 disp(v_correct_perc);
 disp(h_wrong_perc)
 disp(h_correct_perc);
+
+
+
+%%
+
+clc;
+clear all;
+
+data =  readtable('Testing\Ivar-7C-4S-test.csv');
+
+key1_wrong = data.GapsR_1(data.Match==0);
+
+
+
+
 
 
 
