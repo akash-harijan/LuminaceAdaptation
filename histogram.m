@@ -2,10 +2,10 @@
 clear all;
 clc;
 
-data = readtable('test.csv');
+% data = readtable('test.csv');
 % data =  readtable('Testing\Akash-7C-4S-test.csv');
 % data =  readtable('Testing\Ehsan-7C-4S-test.csv');
-% data =  readtable('Testing\Ivar-7C-4S-test.csv');
+data =  readtable('Testing\Ivar-7C-4S-test.csv');
 
 key1_wrong = data.GapsR_1(data.Match==0);
 key1_correct = data.GapsR_1(data.Match==1);
@@ -73,14 +73,86 @@ disp(h_correct_perc);
 clc;
 clear all;
 
-data =  readtable('Testing\Ivar-7C-4S-test.csv');
+data =  readtable('Testing\Akash-7C-4S-test.csv');
+% data =  readtable('Testing\Ehsan-7C-4S-test.csv');
+% data =  readtable('Testing\Ivar-7C-4S-test.csv');
 
-key1_wrong = data.GapsR_1(data.Match==0);
+% data = data(data.Color==1,:); % sanity test
 
 
+% get real both gaps showed
+key1_wrong_R = data.GapsR_1(data.Match==0);
+key2_wrong_R = data.GapsR_2(data.Match==0);
+
+non_nan_indices_R = find(~isnan(key2_wrong_R));
+
+gap_1_R = key1_wrong_R(non_nan_indices_R);
+gap_2_R = key2_wrong_R(non_nan_indices_R);
 
 
+% get pressed both gaps 
+key1_wrong_P = data.GapsP_1(data.Match==0);
+key2_wrong_P = data.GapsP_2(data.Match==0);
 
+% non_nan_indices_P = find(~isnan(key2_wrong_P));
+
+gap_1_P = key1_wrong_P(non_nan_indices_R);
+gap_2_P = key2_wrong_P(non_nan_indices_R);
+
+gaps_R = cat(2, gap_1_R, gap_2_R);
+gaps_P = cat(2, gap_1_P, gap_2_P);
+
+missed_gaps = [];
+for i=1:length(gaps_R)
+    for j=1:2
+        key = gaps_R(i, j);
+        if ~ismember(key, gaps_P(i,:))
+            missed_gaps  = [missed_gaps, key];
+        end
+
+    end
+end
+
+
+all_gaps = gaps_R(:);
+
+all_gaps_count = [sum(all_gaps==2) sum(all_gaps==4) sum(all_gaps==6) sum(all_gaps==8)];
+missed_gaps_count = [sum(missed_gaps==2) sum(missed_gaps==4) sum(missed_gaps==6) sum(missed_gaps==8)];
+
+% in case we all have 4 values in our array otherwise it wont work.
+% all_gaps_count = histcounts(all_gaps, 4);
+% missed_gaps_count = histcounts(missed_gaps, 4);
+
+
+all_gaps_vh = [all_gaps_count(1)+all_gaps_count(4) all_gaps_count(2)+all_gaps_count(3)];
+missed_gaps_vh = [missed_gaps_count(1)+missed_gaps_count(4) missed_gaps_count(2)+missed_gaps_count(3)];
+correct_gaps_vh = all_gaps_vh-missed_gaps_vh;
+
+
+figure
+
+h = bar([1 2], [all_gaps_vh;missed_gaps_vh;correct_gaps_vh]);
+xticklabels({'Vertical','Horizontal'});
+set(h(1), 'FaceColor', 'Blue');
+set(h(2), 'FaceColor', 'red');
+set(h(3), 'FaceColor', 'green');
+
+
+v_wrong_perc = (missed_gaps_vh(1)/all_gaps_vh(1))*100 ;
+v_correct_perc = (correct_gaps_vh(1)/all_gaps_vh(1))*100;
+
+h_wrong_perc = (missed_gaps_vh(2)/all_gaps_vh(2))*100;
+h_correct_perc = (correct_gaps_vh(2)/all_gaps_vh(2))*100;
+
+wrong_perc = [v_wrong_perc h_wrong_perc];
+correct_perc = [v_correct_perc, h_correct_perc];
+
+x = [1 2];
+for i=1:length(x)
+    text(x(i)-0.2,all_gaps_vh(i),sprintf('%.2f',100)+"%",'HorizontalAlignment','center','VerticalAlignment','bottom')
+    text(x(i),missed_gaps_vh(i),sprintf('%.2f',wrong_perc(i))+"%",'HorizontalAlignment','center','VerticalAlignment','bottom')
+    text(x(i)+0.2,correct_gaps_vh(i),sprintf('%.2f',correct_perc(i))+"%",'HorizontalAlignment','center','VerticalAlignment','bottom')
+end
 
 
 
