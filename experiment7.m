@@ -56,7 +56,11 @@ data = [];
 starting_lumas = [10 20 10 50 5 10 10];
 quest_thresholds = [];
 
-for i=1:7
+
+sequence = randperm(7); % random colors 
+for idx=1:7
+
+    i = sequence(idx);
 
     EXIT_SIGNAL = 0;
     surrLumaJump = 0;
@@ -70,6 +74,23 @@ for i=1:7
     tGuess=0;tGuessSd=20;pThreshold=0.51;beta=3.5;delta=0.01;gamma=0.5;grain=0.01;range=2000;
     q = QuestCreate(tGuess, tGuessSd, pThreshold, beta, delta, gamma, grain, range);
 
+
+    % black screen for n (10) seconds ----------------------------------
+
+    pause_time = 10; % seconds
+    start_time = GetSecs+1;
+        
+    while (GetSecs-start_time) < pause_time
+
+        Screen('FillRect', win, [0 0 0]);    
+        Screen('Flip', win);
+
+    end
+
+    Screen('Close');
+
+
+    % Smoothing screen -------------------------------------------------
 
     pause_time = 10; % seconds
     start_time = GetSecs+1;
@@ -141,7 +162,10 @@ for i=1:7
     Screen('Close');
 
 
+    % experiment start from here -----------------------------------------
+
     surrLumaInt = starting_lumas(i);
+    prev_luma_wrong = -1;
     while ~EXIT_SIGNAL
 
         prev_surrLumaInt = surrLumaInt;

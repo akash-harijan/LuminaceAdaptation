@@ -53,9 +53,9 @@ data = [];
 
 % starting_lumas = [50 100 50 500 5 80 50];
 
-starting_lumas = [10 20 10 50 5 10 10];
+starting_lumas = [10 250 10 50 5 10 10];
  
-i=1;
+i=2;
 % for i=1:7
 
 EXIT_SIGNAL = 0;
@@ -369,7 +369,7 @@ while ~EXIT_SIGNAL
         unmatchs = 0;
 %             unmatchs = unmatchs - 1;
     end 
-- 
+    
     timeTaken = toc;
     data = [data; [stimuli_counter, stimulusLuma, backLuma, prev_surrLumaInt, surrLumaJump, surrColor, {gaps_real}, {pressed_keys}, timeTaken, is_match, unmatchs]];
     stimuli_counter = stimuli_counter + 1;

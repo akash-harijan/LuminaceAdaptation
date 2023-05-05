@@ -1,12 +1,18 @@
 clc;
 clear all;
 
+
+data = readtable('Testing\test.csv');
+
 % data = readtable('Results\Ahsan\test.csv');
 % data = readtable('Results\Steven\4-20-23-test.csv');
 % data = readtable('test.csv');
-data = readtable('Testing\Ehsan-7C-4S-test.csv');
+% data = readtable('Testing\Ehsan-7C-4S-test.csv');
 % data = readtable('Results\Giorgio\3-6-4-23-test.csv');
 % data = readtable('Results\Greg\test.csv');
+
+% data = readtable('Testing\Ivar-7C-4S-test.csv');
+% data = readtable('Testing\Akash-14C-5S-test.csv');
 
 
 colors = unique(data.Color);
@@ -18,6 +24,7 @@ colors = unique(data.Color);
 % figure()
 % t = tiledlayout(4,4);
 % color_names = ["White","White", "Red", "Red", "Green","Green", "Blue", "Blue","Yellow","Yellow", "Magenta", "Magenta", "Cyan", "Cyan"];
+% colors = unique(data.Color);
 
 
 figure()
