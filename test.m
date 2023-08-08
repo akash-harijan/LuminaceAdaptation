@@ -98,7 +98,7 @@ catall = cat(2, catrgb*1023, convXYZ);
 catall = cat(2, catall, lab);
 
 % 
-writematrix(catall,'test2.xlsx');
+% writematrix(catall,'test2.xlsx');
 
 
 %% 
@@ -248,3 +248,29 @@ plot(stimlevels);
 %     end
 % 
 % end
+
+%%
+
+
+
+rgb = [1 1 1];
+lab_w = rgb2lab(rgb);
+lch_w = lab2lch(lab_w)/100.0;
+
+rgb = [1 0 0];
+lab_r = rgb2lab(rgb);
+lch_r = lab2lch(lab_r)/100.0;
+
+
+rgb = [0 0 1];
+lab_b = rgb2lab(rgb);
+lch_b = lab2lch(lab_b)/100.0;
+
+rgb = [0 1 0];
+lab_g = rgb2lab(rgb);
+lch_g = lab2lch(lab_g)/100.0;
+
+
+rgb = [1 1 0];
+lab_y = rgb2lab(rgb);
+lch_y = lab2lch(lab_y)/100.0;
